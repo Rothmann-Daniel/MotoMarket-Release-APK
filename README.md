@@ -217,3 +217,344 @@ app/
 | `zh` | 中文 | 🇨🇳 |
 
 > Если локаль не входит в список — письмо отправляется на **английском** (fallback).
+
+
+### 🏍️ Аренда мотоциклов (`EmailHelper`)
+
+| Событие | Получатель | Язык |
+|---------|-----------|------|
+| Новый заказ на аренду (+ вложения документов) | 👑 Администраторы | 🇷🇺 Русский |
+| Заявка принята (авто-отбивка) | 👤 Пользователь | по локали |
+| Заказ подтверждён администратором | 👤 Пользователь | по локали |
+| Заказ отменён с причиной | 👤 Пользователь | по локали |
+
+**Что в письме пользователю:**
+
+- Модель, год и цвет мотоцикла
+- Период аренды (дата начала / окончания / количество дней)
+- Итоговая стоимость
+- Адрес доставки
+- Запрошенная экипировка
+- В письме-подтверждении — чек-лист «Что взять с собой»
+
+**Что в письме администраторам:**
+
+- Данные клиента (ФИО, email, телефон, язык)
+- Детали аренды и сумма
+- Адрес доставки и примечание
+- Статус документов клиента
+- **Вложения**: фотографии паспорта, визы, прав, страховки (JPEG)
+- Отметка о согласии с договором
+
+### 🛠️ Сервисное обслуживание (`ServiceEmailHelper`)
+
+| Событие | Получатель | Язык |
+|---------|-----------|------|
+| Новая заявка на ТО | 👑 Администраторы | 🇷🇺 Русский |
+| Заявка принята (авто-отбивка) | 👤 Пользователь | по локали |
+| Заявка подтверждена администратором | 👤 Пользователь | по локали |
+| Заявка отменена с причиной | 👤 Пользователь | по локали |
+
+**Что в письме пользователю:**
+
+- Тип обслуживания (🏠 выезд мастера / 🏪 сервисный центр)
+- Адрес или название и адрес центра
+- Дата и время записи
+- Описание перечня работ
+- Комментарий администратора (при подтверждении)
+
+**Что в письме администраторам:**
+
+- Данные клиента
+- Тип обслуживания и место (со ссылкой на Google Maps)
+- Дата и время
+- Перечень работ
+
+### ⚙️ Настройка SMTP
+
+Оба хелпера читают креды из `BuildConfig`:
+
+```properties
+# develop.properties (в .gitignore)
+SMTP_EMAIL=your_email@gmail.com
+SMTP_PASSWORD=your_app_password
+```
+
+> ⚠️ Пароль — **app password** Google, а не обычный пароль аккаунта.  
+> Проверка конфигурации: `EmailHelper.isConfigured` / `ServiceEmailHelper.isConfigured`. Если креды пусты — отправка не выполняется, приложение продолжает работать.
+
+### 🧱 Архитектура email-модуля
+
+```
+order/EmailHelper.kt            service/ServiceEmailHelper.kt
+├── Strings                     ├── Strings
+│   ├── ReceivedStrings         │   ├── ReceivedStrings
+│   ├── ConfirmStrings          │   ├── ConfirmedStrings
+│   └── CancelStrings           │   └── CancelledStrings
+├── createSession()             ├── createSession()
+├── sendEmail { }               ├── sendEmail { }
+├── sendOrderToAdmins()         ├── sendServiceRequestToAdmins()
+├── sendOrderReceivedToUser()   ├── sendServiceRequestReceivedToUser()
+├── sendConfirmationToUser()    ├── sendServiceConfirmationToUser()
+└── sendCancellationToUser()    └── sendServiceCancellationToUser()
+```
+
+**Особенности:**
+
+- `suspend`-функции на `Dispatchers.IO`
+- HTML на inline-стилях (совместимо с Gmail, Outlook, Apple Mail)
+- `MimeMultipart("alternative")` для HTML-писем
+- `MimeMultipart("mixed")` для писем с вложениями
+- Отдельные `SimpleDateFormat` под каждую локаль
+- Локализация через вложенные `data class` для каждого типа письма
+
+---
+
+## 🌐 Локализация
+
+Приложение полностью поддерживает **русский** и **английский** языки интерфейса, а email-уведомления — **5 языков**.
+
+**Структура:**
+
+- `res/values/strings.xml` — русский
+- `res/values-en/strings.xml` — английский
+- `AppColors` — единая палитра (вынесена из хардкода)
+
+Все строки UI вынесены в ресурсы, хардкод в коде отсутствует.
+
+---
+
+## 🚀 Запуск проекта
+
+### Требования
+
+- Android Studio Hedgehog или новее
+- JDK 17+
+- Android SDK 26+
+- Устройство или эмулятор с Android 8.0 (API 26) и выше
+- Аккаунт Firebase и файл `google-services.json`
+- Google-аккаунт с **app password** для SMTP (для email-уведомлений)
+
+### Шаги
+
+1. Клонируй репозиторий:
+
+```bash
+git clone https://github.com/Rothmann-Daniel/MotoMarket.git
+cd MotoMarket
+```
+
+2. Открой проект в **Android Studio**
+
+3. Добавь файл `google-services.json` из Firebase Console в папку `app/`
+
+4. Создай файл `develop.properties` в корне и добавь SMTP-креды:
+
+```properties
+SMTP_EMAIL=your_email@gmail.com
+SMTP_PASSWORD=your_app_password
+```
+
+> Файл добавлен в `.gitignore` — креды не попадут в репозиторий.
+
+5. Синхронизируй Gradle (`File → Sync Project with Gradle Files`)
+
+6. Запусти приложение на эмуляторе или устройстве (**Run → Run 'app'**)
+
+---
+
+## 🔑 Тестовые аккаунты
+
+| Роль | Email | Пароль |
+|:---:|:---:|:---:|
+| 👑 Администратор | `<admin@example.com>` | `ПО ЗАПРОСУ` |
+| 👤 Обычный пользователь | `<test@test.com>` | `<qwerty>` |
+
+> ⚠️ Учётные записи созданы для тестирования.
+
+### Функционал по ролям
+
+**👑 Администратор:**
+
+- Полный CRUD по мотоциклам, экипировке, аренде
+- Управление заказами и заявками
+- Управление статусами и видимостью
+- Просмотр входящих email-уведомлений
+- Загрузка фотографий
+
+**👤 Пользователь:**
+
+- Просмотр каталогов и фильтрация
+- Корзина и оформление заказов
+- Заявки на тест-драйв и сервис
+- Просмотр профиля и истории
+- Загрузка документов
+
+---
+
+## 📦 Основные зависимости
+
+```kotlin
+// Jetpack Compose
+implementation(platform("androidx.compose:compose-bom"))
+implementation("androidx.compose.ui:ui")
+implementation("androidx.compose.material3:material3")
+implementation("androidx.activity:activity-compose")
+implementation("androidx.navigation:navigation-compose")
+
+// Firebase
+implementation(platform("com.google.firebase:firebase-bom"))
+implementation("com.google.firebase:firebase-auth-ktx")
+implementation("com.google.firebase:firebase-firestore-ktx")
+implementation("com.google.firebase:firebase-storage-ktx")
+
+// Lifecycle / ViewModel
+implementation("androidx.lifecycle:lifecycle-viewmodel-compose")
+implementation("androidx.lifecycle:lifecycle-runtime-ktx")
+
+// Coroutines
+implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android")
+
+// Email
+implementation("com.sun.mail:android-mail:1.6.7")
+implementation("com.sun.mail:android-activation:1.6.7")
+```
+
+---
+
+## 📸 Скриншоты
+
+<details>
+<summary>📱 Посмотреть скриншоты приложения</summary>
+
+| Каталог продажи | Карточка мотоцикла | Корзина |
+|:---:|:---:|:---:|
+| ![](docs/screenshots/shop-catalog.png) | ![](docs/screenshots/bike-card.png) | ![](docs/screenshots/cart.png) |
+
+| Аренда | Тест-драйв | Сервис |
+|:---:|:---:|:---:|
+| ![](docs/screenshots/rent-catalog.png) | ![](docs/screenshots/testride.png) | ![](docs/screenshots/service.png) |
+
+| Админ-панель | Заказы | Профиль |
+|:---:|:---:|:---:|
+| ![](docs/screenshots/admin.png) | ![](docs/screenshots/orders.png) | ![](docs/screenshots/profile.png) |
+
+</details>
+
+<details>
+<summary>📧 Посмотреть примеры email-писем</summary>
+
+| Аренда — принято | Аренда — подтверждено |
+|:---:|:---:|
+| ![](docs/screenshots/email-order-received.png) | ![](docs/screenshots/email-order-confirmed.png) |
+
+| Сервис — принято | Сервис — подтверждено |
+|:---:|:---:|
+| ![](docs/screenshots/email-service-received.png) | ![](docs/screenshots/email-service-confirmed.png) |
+
+</details>
+
+---
+
+## 🧪 Тестирование
+
+Планируется покрытие:
+
+- Unit-тестами — ViewModel, репозитории, email-хелперы
+- UI-тестами — основные пользовательские сценарии
+
+Тестируемые сценарии:
+
+- Авторизация и регистрация
+- Просмотр каталога и фильтрация
+- Добавление в корзину и оформление заказа
+- Подача заявки на тест-драйв и сервис
+- Управление статусами аренды
+- Отправка email-уведомлений
+
+---
+
+## ⚙️ CI/CD
+
+В проекте настроены **GitHub Actions** (`.github/workflows`) для автоматической сборки и проверок:
+
+- Компиляция проекта
+- Сборка APK
+- Запуск unit-тестов (при наличии)
+- Статический анализ (при наличии)
+
+---
+
+## 🎯 Дорожная карта
+
+### ✅ Реализовано
+
+- [x] Авторизация и регистрация (Firebase Auth)
+- [x] Каталог мотоциклов на продажу
+- [x] Каталог экипировки на продажу
+- [x] Корзина и оформление заказа
+- [x] Каталог аренды мотоциклов
+- [x] Каталог аренды экипировки
+- [x] Заявки на тест-драйв
+- [x] Заявки на сервисное обслуживание
+- [x] Карта с адресами пунктов выдачи
+- [x] Админ-панель: CRUD по всем сущностям
+- [x] Управление заказами и статусами
+- [x] История аренды для пользователя
+- [x] Email-уведомления на 5 языках
+- [x] Вложения документов клиента в админских письмах
+- [x] Локализация ru / en
+- [x] Material 3 интерфейс
+- [x] Вынос цветов в `AppColors`
+- [x] CI/CD через GitHub Actions
+
+### 🎯 Возможные улучшения
+
+- [ ] Онлайн-оплата
+- [ ] Push-уведомления (FCM)
+- [ ] Избранное
+- [ ] Аналитика и отчёты для админа
+- [ ] Отзывы пользователей
+- [ ] Тёмная / светлая тема
+- [ ] Unit-тесты
+- [ ] Больше языков интерфейса
+- [ ] Экспорт данных (PDF / CSV)
+
+---
+
+## 💡 Ключевые преимущества
+
+✨ **Полный цикл бизнеса** — продажа, аренда, сервис, тест-драйв  
+📧 **5-язычные email-уведомления** с вложениями документов  
+🌐 **Мультиязычный интерфейс** (ru / en)  
+⚡ **Реактивный UI** на StateFlow  
+📱 **Material 3** — современный дизайн  
+🔐 **Firebase** — надёжная авторизация и хранение  
+🎨 **Единая палитра** в `AppColors`  
+🧪 **Production-ready код** — готов к развёртыванию  
+📦 **Активное развитие** — проект обновляется
+
+---
+
+## 👨‍💻 Автор
+
+**Данила Ротман** — Android Developer
+
+- 📱 Telegram: [@danielrothmann](https://t.me/danielrothmann)
+- 🌐 GitHub: [@Rothmann-Daniel](https://github.com/Rothmann-Daniel)
+
+---
+
+## 📄 Лицензия
+
+Проект доступен для ознакомления и обучения. Коммерческое использование требует согласования с автором.
+
+---
+
+<div align="center">
+
+**⭐ Если проект понравился, поставьте звезду!**
+
+Made by Daniel Rothmann
+
+</div>
