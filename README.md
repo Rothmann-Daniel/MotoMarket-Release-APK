@@ -444,13 +444,15 @@ implementation("com.sun.mail:android-activation:1.6.7")
 <details>
 <summary>📧 Посмотреть примеры email-писем</summary>
 
-| Аренда — принято | Аренда — подтверждено |
-|:---:|:---:|
-| ![](docs/screenshots/email-order-received.png) | ![](docs/screenshots/email-order-confirmed.png) |
+<img width="431" height="817" alt="Снимок экрана — 2026-09-15 в 17 06 56" src="https://github.com/user-attachments/assets/1c009103-cd72-4516-8277-8262847bd511" />
+<img width="1719" height="909" alt="Снимок экрана — 2026-09-15 в 17 07 27" src="https://github.com/user-attachments/assets/88c8fd94-dd3b-46cf-b53b-69f3cb80edbe" />
+<img width="424" height="522" alt="Снимок экрана — 2026-09-15 в 17 07 47" src="https://github.com/user-attachments/assets/4d1d1f26-8bc1-4940-923a-6fa52788db3b" />
+<img width="1728" height="697" alt="Снимок экрана — 2026-09-15 в 17 07 41" src="https://github.com/user-attachments/assets/0898b4dc-d9db-40b0-a775-5aa0fd0b3e76" />
+<img width="482" height="713" alt="Снимок экрана — 2026-09-15 в 17 09 10" src="https://github.com/user-attachments/assets/c4e6fff2-11b5-46c3-a942-a87c995df7c3" />
+<img width="491" height="548" alt="Снимок экрана — 2026-09-15 в 17 09 20" src="https://github.com/user-attachments/assets/fc7828ca-a1e0-475f-86a5-7dc6782c34df" />
+<img width="523" height="714" alt="Снимок экрана — 2026-09-15 в 17 10 26" src="https://github.com/user-attachments/assets/7af2d101-b955-4715-a1cc-9b7cdac5224e" />
+<img width="453" height="654" alt="Снимок экрана — 2026-09-15 в 17 10 36" src="https://github.com/user-attachments/assets/37d03343-e2b4-4158-a6c2-ac1a4ad5e323" />
 
-| Сервис — принято | Сервис — подтверждено |
-|:---:|:---:|
-| ![](docs/screenshots/email-service-received.png) | ![](docs/screenshots/email-service-confirmed.png) |
 
 </details>
 
