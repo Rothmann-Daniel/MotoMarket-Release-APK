@@ -13,13 +13,39 @@
 
 ---
 
+# MotoMarket - Release APK
+
+Официальный репозиторий для распространения APK-файлов приложения **MotoMarket**.
+
 ## 📥 Скачать приложение
 
 [![Download APK](https://img.shields.io/badge/Download-APK-blue?style=for-the-badge&logo=android)](https://github.com/Rothmann-Daniel/MotoMarket-Release-APK/releases/download/v1.0.0-rc.1/MotoMarket_v1.0.0-rc.1.apk)
 
 **Или перейдите на:** [Страницу Releases](https://github.com/Rothmann-Daniel/MotoMarket-Release-APK/releases) для просмотра всех версий
 
-> **Текущая версия:** `v1.0.0-rc.1` (release candidate — предрелизная)
+> **Текущая версия:** `v1.0.0-rc.1` — release candidate (предрелизная). Финальная `v1.0.0` появится позже.
+
+## 🛡️ Безопасность
+
+- ✅ Это **официальный** репозиторий MotoMarket. Скачивайте APK только отсюда.
+- ✅ Каждый файл **подписан** цифровым ключом разработчика.
+- ✅ Проверяется на наличие вредоносного ПО перед публикацией.
+- ✅ Исходный код доступен в отдельном репозитории: `[ссылка]`.
+
+## ⚠️ Установка (Sideloading)
+
+Android будет предупреждать при установке APK не из Google Play. Это нормально.
+
+1. Скачайте APK по кнопке выше.
+2. При открытии разрешите установку из этого источника (Настройки → Разрешить).
+3. Если Play Protect предупредит — нажмите «Установить всё равно».
+
+## 🐞 Сообщить о проблеме
+
+Создайте Issue в этом репозитории.
+
+---
+![Downloads](https://img.shields.io/github/downloads/Rothmann-Daniel/MotoMarket-Release-APK/total)
 
 ---
 
