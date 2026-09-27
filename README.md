@@ -10,7 +10,8 @@
 
 ---
 [![Скачать PDF](https://img.shields.io/badge/📄_Presentation_MotoMarket_PDF-D32F2F?style=for-the-badge&logo=adobeacrobatreader&logoColor=white)](https://github.com/Rothmann-Daniel/MotoMarket-Release-APK/raw/main/docs/MotoMarket_saas_VietKeys_PDF.pdf)
---
+
+---
 
 ## 📖 О проекте
 
