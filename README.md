@@ -13,6 +13,16 @@
 
 ---
 
+## 📥 Скачать приложение
+
+[![Download APK](https://img.shields.io/badge/Download-APK-blue?style=for-the-badge&logo=android)](https://github.com/Rothmann-Daniel/MotoMarket-Release-APK/releases/download/v1.0.0-rc.1/MotoMarket_v1.0.0-rc.1.apk)
+
+**Или перейдите на:** [Страницу Releases](https://github.com/Rothmann-Daniel/MotoMarket-Release-APK/releases) для просмотра всех версий
+
+> **Текущая версия:** `v1.0.0-rc.1` (release candidate — предрелизная)
+
+---
+
 ## 📖 О проекте
 
 MotoMarket — это многофункциональная платформа для мотосалона, объединяющая в одном приложении:
