@@ -103,7 +103,8 @@ Android будет предупреждать при установке APK не
 <a name="issues"></a>
 ## 🐞 Сообщить о проблеме
 
-Создайте Issue в этом репозитории.
+- Создайте Issue в этом репозитории.
+- Напишите через контакты
 
 ---
 ![Downloads](https://img.shields.io/github/downloads/Rothmann-Daniel/MotoMarket-Release-APK/total)
